@@ -16,7 +16,7 @@ namespace MvcClassroom.Models
                 serviceProvider.GetRequiredService<
                     DbContextOptions<MvcClassroomContext>>()))
             {
-                // Look for any movies.
+                // Look for any classes.
                 if (context.Classes.Any())
                 {
                     return;   // DB has been seeded

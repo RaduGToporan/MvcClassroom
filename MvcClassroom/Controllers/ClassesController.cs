@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using MvcClassroom.Data;
 using MvcClassroom.Models;
+using MvcClassroom.Data;
 
 namespace MvcClassroom.Controllers
 {
@@ -20,9 +20,12 @@ namespace MvcClassroom.Controllers
         }
 
         // GET: Classes
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
-            return View(await _context.Classes.ToListAsync());
+            var qry = _context.Classes.AsNoTracking().OrderBy(p => p.Id);
+            int pageSize = 2;
+            var model = await PaginatedList<Class>.CreateAsync(qry, page, pageSize);
+            return View(model);
         }
 
         // GET: Classes/Details/5

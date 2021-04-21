@@ -15,5 +15,6 @@ namespace MvcClassroom.Data
         }
 
         public DbSet<Class> Classes { get; set; }
+        //public object Class { get; internal set; }
     }
 }
