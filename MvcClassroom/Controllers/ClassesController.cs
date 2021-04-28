@@ -36,7 +36,7 @@ namespace MvcClassroom.Controllers
                 return NotFound();
             }
 
-            var @class = await _context.Classes
+            var @class = await _context.Classes.Include(m => m.Assignments)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (@class == null)
             {
@@ -46,6 +46,16 @@ namespace MvcClassroom.Controllers
             return View(@class);
         }
 
+        public async Task<IActionResult> AddAssignment(int classId, Assignment assignment)
+        {
+            var cls = await _context.Classes.Include(m => m.Assignments)
+                .FirstOrDefaultAsync(m => m.Id == classId);
+            cls.Assignments.Add(assignment);
+            _context.Classes.Update(cls);
+            _context.SaveChanges();
+            return RedirectToAction("Details", new { id = classId });
+
+        }
         // GET: Classes/Create
         public IActionResult Create()
         {

@@ -13,5 +13,7 @@ namespace MvcClassroom.Models
 
         [DataType(DataType.Date)]
         public DateTime ExamDate { get; set; }
+
+        public List<Assignment> Assignments { get; set; }
     }
 }
