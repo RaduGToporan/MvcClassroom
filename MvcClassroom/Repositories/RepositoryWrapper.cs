@@ -7,27 +7,46 @@ using MvcClassroom.Models;
 
 namespace MvcClassroom.Repositories
 {
-    public class RepositoryWrapper:IRepositoryWrapper
+    public class RepositoryWrapper : IRepositoryWrapper
     {
-        private MvcClassroomContext classroomContext;
-        private IAssignmentRepository assignmentRepository;
-        private IClassRepository classRepository;
+        private MvcClassroomContext _classroomContext;
+        private IAssignmentRepository _assignmentRepository;
+        private IClassRepository _classRepository;
+
+        
+
+        public IClassRepository PostRepository
+        {
+            get
+            {
+                if (_classRepository == null)
+                {
+                    _classRepository = new ClassRepository(_classroomContext);
+                }
+                return _classRepository;
+            }
+        }
 
         public IAssignmentRepository AssignmentRepository
         {
             get
             {
-                if(assignmentRepository==null)
+                if (_assignmentRepository == null)
                 {
-                    assignmentRepository = new AssignmentRepository(classroomContext);
+                    _assignmentRepository = new AssignmentRepository(_classroomContext);
                 }
-                return assignmentRepository;
+                return _assignmentRepository;
             }
+        }
+
+        public RepositoryWrapper(MvcClassroomContext classroomContext)
+        {
+            _classroomContext = classroomContext;
         }
 
         public void Save()
         {
-            classroomContext.SaveChanges();
+            _classroomContext.SaveChanges();
         }
     }
 }

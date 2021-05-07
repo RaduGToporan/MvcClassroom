@@ -1,5 +1,4 @@
-﻿
-using MvcClassroom.Repositories;
+﻿using MvcClassroom.Repositories;
 
 namespace MvcClassroom.Services
 {
