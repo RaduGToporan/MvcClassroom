@@ -13,7 +13,10 @@ namespace MvcClassroom.Repositories
         private IAssignmentRepository _assignmentRepository;
         private IClassRepository _classRepository;
 
-        
+        public RepositoryWrapper(MvcClassroomContext classroomContext)
+        {
+            _classroomContext = classroomContext;
+        }
 
         public IClassRepository PostRepository
         {
@@ -21,6 +24,7 @@ namespace MvcClassroom.Repositories
             {
                 if (_classRepository == null)
                 {
+
                     _classRepository = new ClassRepository(_classroomContext);
                 }
                 return _classRepository;
@@ -39,10 +43,7 @@ namespace MvcClassroom.Repositories
             }
         }
 
-        public RepositoryWrapper(MvcClassroomContext classroomContext)
-        {
-            _classroomContext = classroomContext;
-        }
+        public IClassRepository ClassRepository => throw new NotImplementedException();
 
         public void Save()
         {
