@@ -1,0 +1,53 @@
+﻿@model IEnumerable<MvcClassroom.Models.Grade>
+
+@{
+    ViewData["Title"] = "Index";
+}
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> userManager;
+
+@{ IdentityUser user = userManager.GetUserAsync(User).GetAwaiter().GetResult();
+}
+<h1>Index</h1>
+@if (userManager.IsInRoleAsync(user, "Teacher").GetAwaiter().GetResult() == true)
+{
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Course)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GradeNumber)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Course)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GradeNumber)
+                </td>
+                <td>
+                    @if (userManager.IsInRoleAsync(user, "Teacher").GetAwaiter().GetResult() == true)
+                    {
+
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> 
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
