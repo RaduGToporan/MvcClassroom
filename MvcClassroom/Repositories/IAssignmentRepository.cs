@@ -6,6 +6,6 @@ namespace MvcClassroom.Repositories
 {
     public interface IAssignmentRepository : IRepositoryBase<Assignment>
     {
-        object FindByCondition(Expression<Func<Class, bool>> expression);
+        Assignment FindByCondition(Expression<Func<Class, bool>> expression);
     }
 }
