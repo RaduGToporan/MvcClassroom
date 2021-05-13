@@ -45,6 +45,24 @@ namespace MvcClassroom.Models
                     {
                         Title = "Formal Languages and Automata",
                         ExamDate = DateTime.Parse("2021-6-14")
+                    },
+
+                    new Class
+                    {
+                        Title = "Project II Use of Databases",
+                        ExamDate = DateTime.Parse("2021-6-15")
+                    },
+
+                    new Class
+                    {
+                        Title = "Web Application Design",
+                        ExamDate = DateTime.Parse("2021-6-19")
+                    },
+
+                    new Class
+                    {
+                        Title = "Computer Networks",
+                        ExamDate = DateTime.Parse("2021-6-15")
                     }
                 );
                 context.SaveChanges();
