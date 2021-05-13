@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MvcClassroom.Data;
+using MvcClassroom.Repositories;
+using MvcClassroom.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,7 +39,9 @@ namespace MvcClassroom
             services.AddControllersWithViews();
             services.AddDbContext<MvcClassroomContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("MvcClassroomContext")));
-
+            services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
+            services.AddScoped<BaseService>();
+            services.AddScoped<AssignmentService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
