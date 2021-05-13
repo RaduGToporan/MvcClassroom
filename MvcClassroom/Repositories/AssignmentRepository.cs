@@ -14,7 +14,7 @@ namespace MvcClassroom.Repositories
         {
         }
 
-        public object FindByCondition(Expression<Func<Class, bool>> expression)
+        public Assignment FindByCondition(Expression<Func<Class, bool>> expression)
         {
             throw new NotImplementedException();
         }
