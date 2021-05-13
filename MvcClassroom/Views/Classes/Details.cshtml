@@ -1,11 +1,13 @@
 ﻿@model MvcClassroom.Models.Class
-
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> userManager;
 @{
     ViewData["Title"] = "Details";
 }
 
 <h1>Details</h1>
-
+@{ IdentityUser user = userManager.GetUserAsync(User).GetAwaiter().GetResult();
+}
 <div>
     <h4>Class</h4>
     <hr />
@@ -25,7 +27,11 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    @if (userManager.IsInRoleAsync(user, "Teacher").GetAwaiter().GetResult() == true || userManager.IsInRoleAsync(user, "Admin").GetAwaiter().GetResult() == true)
+    {
+
+        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> 
+    }
     <a asp-action="Index">Back to List</a>
 </div>
 
@@ -61,15 +67,20 @@
     </tbody>
 </table>
 
-<form asp-action="AddAssignment">
-    <input type="hidden" name="classId" value="@Model.Id" />
-    <div>
-        <label style="margin-left:3px;">Title</label>
-        <input name="Title" />
-    </div>
-    <div>
-        <label style="margin-right:3px;">Content</label>
-        <textarea name="Content" cols="30" rows="5" style="margin-left:-6px;"></textarea>
-    </div>
-    <button class="btn btn-primary">Send assignment</button>
-</form>
+
+@if (userManager.IsInRoleAsync(user, "Teacher").GetAwaiter().GetResult() == true)
+{
+
+    <form asp-action="AddAssignment">
+        <input type="hidden" name="classId" value="@Model.Id" />
+        <div>
+            <label style="margin-left:3px;">Title</label>
+            <input name="Title" />
+        </div>
+        <div>
+            <label style="margin-right:3px;">Content</label>
+            <textarea name="Content" cols="30" rows="5" style="margin-left:-6px;"></textarea>
+        </div>
+        <button class="btn btn-primary">Send assignment</button>
+    </form>
+}

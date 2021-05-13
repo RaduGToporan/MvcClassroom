@@ -18,5 +18,8 @@ namespace MvcClassroom.Data
         //public object Class { get; internal set; }
 
         public DbSet<Assignment> Assignments { get; set; }
+        //public object Class { get; internal set; }
+
+        public DbSet<MvcClassroom.Models.Grade> Grade { get; set; }
     }
 }

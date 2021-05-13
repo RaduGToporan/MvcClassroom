@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MvcClassroom.Data;
 
 namespace MvcClassroom.Migrations
 {
     [DbContext(typeof(MvcClassroomContext))]
-    partial class MvcClassroomContextModelSnapshot : ModelSnapshot
+    [Migration("20210513182909_AddedGrades")]
+    partial class AddedGrades
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

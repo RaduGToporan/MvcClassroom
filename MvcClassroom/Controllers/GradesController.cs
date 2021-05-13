@@ -2,35 +2,32 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using MvcClassroom.Models;
 using MvcClassroom.Data;
-using Microsoft.AspNetCore.Authorization;
+using MvcClassroom.Models;
 
 namespace MvcClassroom.Controllers
 {
     [Authorize]
-    public class ClassesController : Controller
+    public class GradesController : Controller
     {
         private readonly MvcClassroomContext _context;
 
-        public ClassesController(MvcClassroomContext context)
+        public GradesController(MvcClassroomContext context)
         {
             _context = context;
         }
 
-        // GET: Classes
-        public async Task<IActionResult> Index(int page = 1)
+        // GET: Grades
+        public async Task<IActionResult> Index()
         {
-            var qry = _context.Classes.AsNoTracking().OrderBy(p => p.Id);
-            int pageSize = 2;
-            var model = await PaginatedList<Class>.CreateAsync(qry, page, pageSize);
-            return View(model);
+            return View(await _context.Grade.ToListAsync());
         }
 
-        // GET: Classes/Details/5
+        // GET: Grades/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -38,50 +35,39 @@ namespace MvcClassroom.Controllers
                 return NotFound();
             }
 
-            var @class = await _context.Classes.Include(m => m.Assignments)
+            var grade = await _context.Grade
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (@class == null)
+            if (grade == null)
             {
                 return NotFound();
             }
 
-            return View(@class);
+            return View(grade);
         }
 
-        [Authorize(Roles ="Teacher,Administrator")]
-        public async Task<IActionResult> AddAssignment(int classId, Assignment assignment)
-        {
-            var cls = await _context.Classes.Include(m => m.Assignments)
-                .FirstOrDefaultAsync(m => m.Id == classId);
-            cls.Assignments.Add(assignment);
-            _context.Classes.Update(cls);
-            _context.SaveChanges();
-            return RedirectToAction("Details", new { id = classId });
-
-        }
-        // GET: Classes/Create
+        // GET: Grades/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Classes/Create
+        // POST: Grades/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,ExamDate")] Class @class)
+        public async Task<IActionResult> Create([Bind("Id,Course,GradeNumber")] Grade grade)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(@class);
+                _context.Add(grade);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(@class);
+            return View(grade);
         }
 
-        // GET: Classes/Edit/5
+        // GET: Grades/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -89,22 +75,22 @@ namespace MvcClassroom.Controllers
                 return NotFound();
             }
 
-            var @class = await _context.Classes.FindAsync(id);
-            if (@class == null)
+            var grade = await _context.Grade.FindAsync(id);
+            if (grade == null)
             {
                 return NotFound();
             }
-            return View(@class);
+            return View(grade);
         }
 
-        // POST: Classes/Edit/5
+        // POST: Grades/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ExamDate")] Class @class)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Course,GradeNumber")] Grade grade)
         {
-            if (id != @class.Id)
+            if (id != grade.Id)
             {
                 return NotFound();
             }
@@ -113,12 +99,12 @@ namespace MvcClassroom.Controllers
             {
                 try
                 {
-                    _context.Update(@class);
+                    _context.Update(grade);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ClassExists(@class.Id))
+                    if (!GradeExists(grade.Id))
                     {
                         return NotFound();
                     }
@@ -129,10 +115,10 @@ namespace MvcClassroom.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(@class);
+            return View(grade);
         }
 
-        // GET: Classes/Delete/5
+        // GET: Grades/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -140,30 +126,30 @@ namespace MvcClassroom.Controllers
                 return NotFound();
             }
 
-            var @class = await _context.Classes
+            var grade = await _context.Grade
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (@class == null)
+            if (grade == null)
             {
                 return NotFound();
             }
 
-            return View(@class);
+            return View(grade);
         }
 
-        // POST: Classes/Delete/5
+        // POST: Grades/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var @class = await _context.Classes.FindAsync(id);
-            _context.Classes.Remove(@class);
+            var grade = await _context.Grade.FindAsync(id);
+            _context.Grade.Remove(grade);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ClassExists(int id)
+        private bool GradeExists(int id)
         {
-            return _context.Classes.Any(e => e.Id == id);
+            return _context.Grade.Any(e => e.Id == id);
         }
     }
 }
