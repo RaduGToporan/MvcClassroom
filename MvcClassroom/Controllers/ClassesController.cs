@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MvcClassroom.Models;
 using MvcClassroom.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MvcClassroom.Controllers
 {
+    [Authorize]
     public class ClassesController : Controller
     {
         private readonly MvcClassroomContext _context;
@@ -46,6 +48,7 @@ namespace MvcClassroom.Controllers
             return View(@class);
         }
 
+        [Authorize(Roles ="Teacher,Administrator")]
         public async Task<IActionResult> AddAssignment(int classId, Assignment assignment)
         {
             var cls = await _context.Classes.Include(m => m.Assignments)

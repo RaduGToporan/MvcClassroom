@@ -61,6 +61,10 @@
     </tbody>
 </table>
 
+@*[Authorize(Roles = "Teacher"]*@
+@if (User.IsInRole("Teacher"))
+{
+
 <form asp-action="AddAssignment">
     <input type="hidden" name="classId" value="@Model.Id" />
     <div>
@@ -73,3 +77,4 @@
     </div>
     <button class="btn btn-primary">Send assignment</button>
 </form>
+}
